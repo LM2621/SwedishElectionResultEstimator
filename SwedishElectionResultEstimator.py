@@ -66,6 +66,24 @@ print("Naive Bayes score:")
 print(cv)
 print(cv.mean())
 
+from sklearn.ensemble import VotingClassifier
+
+# Create a list of the classifiers, containing a string (the name of the model) and the instance of the model.
+estimators = [('rf', rf_classifier), ('lr', logreg), ('gb', gbc), ('nb', nb_classifier)]
+
+# Create the ensemble model.
+ensemble = VotingClassifier(estimators, voting='hard')
+
+# Fit the ensemble model
+ensemble.fit(X_train, y_train)
+
+# Evaluate the ensemble model
+cv = cross_val_score(ensemble, X_train, y_train, cv=3)
+print("Ensemble score:")
+print(cv)
+print(cv.mean())
+
+
 # Predict the classes on the test set.
 logregPredictions = logreg.predict(X_test)
 logregPredictionsDf = pd.DataFrame(logregPredictions, columns=["logregPredictions"])
